@@ -1,8 +1,15 @@
 const http = require('http')
 const Rx = require('@reactivex/rxjs')
 
-const makeHttpEffect = () => {
+const makeServerDriver = (port = 3000, callback) => {
   const requests = new Rx.Subject()
+
+  const serverCallback = (req, res) =>
+          requests.next({ req, res })
+
+  http.createServer(serverCallback)
+    .listen(port, '127.0.0.1', callback)
+
   return {
     writeEffect: model =>
       model.subscribe(({ req, res }) => {
@@ -11,32 +18,26 @@ const makeHttpEffect = () => {
         res.end('Hello world')
         return requests
       }),
-    serverCallback: (req, res) =>
-      requests.next({ req, res }),
+    serverCallback,
     readEffect: requests
   }
 }
 
 const run = (main, drivers) => {
   const sources = {
-    HTTP: drivers.HTTP.readEffect
+    server: drivers.server.readEffect
   }
   const sinks = main(sources)
   Object.keys(drivers).forEach(key =>
                                drivers[key].writeEffect(sinks[key]))
 }
 
-const httpEffect = makeHttpEffect()
-
 const drivers = {
-  HTTP: httpEffect
+  server: makeServerDriver(3000, () => console.log('listening on 3000'))
 }
 
-const main = ({ HTTP }) => ({
-  HTTP: HTTP.do(({ req }) => console.log(`request to ${req.url}`))
+const main = ({ server }) => ({
+  server: server.do(({ req }) => console.log(`request to ${req.url}`))
 })
 
 run(main, drivers)
-
-http.createServer(httpEffect.serverCallback)
-  .listen(3000, '127.0.0.1', () => console.log(`running at localhost:3000`))
