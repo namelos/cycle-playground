@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@reactivex/rxjs": "^5.0.0-beta.7"
+    "@cycle/core": "^6.0.3",
+    "@reactivex/rxjs": "^5.0.0-beta.7",
+    "rx": "^4.1.0"
   }
 }
