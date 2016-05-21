@@ -3,19 +3,18 @@ const Cycle = require('@cycle/core')
 const Rx = require('rx')
 
 const makeServerDriver = port => {
-  const req$ = new Rx.Subject()
-  const res$ = new Rx.Subject()
+  const server$ = new Rx.Subject()
 
   return sink$ => {
-    http.createServer((req, res) => {
-      req$.onNext(req)
-      res.writeHead(200, { 'Content-Type': 'text/plain' })
+    http.createServer((request, response) => {
+      server$.onNext({ request, response })
+      response.writeHead(200, { 'Content-Type': 'text/plain' })
       sink$.subscribe(sink => {
-        res.end(sink)
+        response.end(sink)
       })
     }).listen(port, '127.0.0.1', () => console.log(`listening at ${port}`))
 
-    return req$
+    return server$
   }
 }
 
@@ -24,7 +23,7 @@ const makeConsoleDriver = () =>
         msg$.subscribe(console.log)
 
 const main = ({ console, server }) => ({
-  console: Rx.Observable.of('hello console'),
+  console: server.map(({ request }) => `request for ${request.url}`),
   server: Rx.Observable.of('hello server')
 })
 
