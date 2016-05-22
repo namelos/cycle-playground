@@ -1,7 +1,7 @@
 const http = require('http')
 const { Subject } = require('rx')
 
-const makeServerDriver = port => {
+module.exports = port => {
   const server$ = new Subject()
 
   return sink$ => {
@@ -14,5 +14,3 @@ const makeServerDriver = port => {
     return server$
   }
 }
-
-module.exports = makeServerDriver

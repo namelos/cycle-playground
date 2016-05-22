@@ -1,9 +1,7 @@
-const query = `
+module.exports = `
   {
     user(id: "2") {
       name
     }
   }
 `
-
-module.exports = query

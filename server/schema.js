@@ -23,7 +23,7 @@ const userType = new GraphQLObjectType({
   }
 })
 
-const schema = new GraphQLSchema({
+module.exports = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
     fields: {
@@ -37,6 +37,3 @@ const schema = new GraphQLSchema({
     }
   })
 })
-
-
-module.exports = schema

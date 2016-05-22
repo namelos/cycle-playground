@@ -1,5 +1,3 @@
-const makeConsoleDriver = () =>
+module.exports = () =>
         msg$ =>
         msg$.subscribe(console.log)
-
-module.exports = makeConsoleDriver

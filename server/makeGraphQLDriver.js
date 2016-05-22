@@ -1,7 +1,7 @@
 const { Subject } = require('rx')
 const { graphql } = require('graphql')
 
-const makeGraphQLDriver = schema => {
+module.exports = schema => {
   const res$ = new Subject()
 
   return query$ => {
@@ -14,5 +14,3 @@ const makeGraphQLDriver = schema => {
     return res$
   }
 }
-
-module.exports = makeGraphQLDriver
