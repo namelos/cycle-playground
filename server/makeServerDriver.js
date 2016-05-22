@@ -1,8 +1,8 @@
 const http = require('http')
-const Rx = require('rx')
+const { Subject } = require('rx')
 
 const makeServerDriver = port => {
-  const server$ = new Rx.Subject()
+  const server$ = new Subject()
 
   return sink$ => {
     http.createServer((request, response) => {

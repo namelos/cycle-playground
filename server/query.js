@@ -1,6 +1,6 @@
 const query = `
   {
-    user(id: "1") {
+    user(id: "2") {
       name
     }
   }
