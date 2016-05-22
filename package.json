@@ -14,6 +14,7 @@
     "@cycle/core": "^6.0.3",
     "@reactivex/rxjs": "^5.0.0-beta.7",
     "graphql": "^0.6.0",
+    "mongodb": "^2.1.19",
     "rx": "^4.1.0",
     "webpack": "^1.13.1"
   },
