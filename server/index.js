@@ -11,26 +11,19 @@ const query = require('./query')
 const schema = require('./schema')
 
 const main = ({ server, db, graphql }) => {
+  const request$ = server.select('/').events('get')
+
   return {
-    log: server.map(req => req.url).merge(db).merge(graphql),
-    server: from([{
-      response: 'hello world'
-    }, {
-      route: '/test',
-      response: 'test area'
-    }]),
-    db: of([
-      { title: 'first', text: 'this is first content' },
-      { title: 'second', text: 'this is second content' },
-      { title: 'third', text: 'this is third content' }
-    ]),
-    graphql: of(query)
+    log: request$.map(req => `this would send to console: ${req.url}`),
+    server: request$.map(req => `this would sent to client dom: ${req.url}`),
   }
 }
 
 run(main, {
   log: makeConsoleDriver(),
   server: makeServerDriver(3000),
-  db: makeMongoDBDriver('mongodb://localhost:27017/test'),
-  graphql: makeGraphQLDriver(schema)
 })
+
+/*
+  server.select('/').events('get').map(req => req.url)
+ */

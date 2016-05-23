@@ -1,6 +1,10 @@
 const { MongoClient } = require('mongodb')
 const { Subject } = require('rx')
 
+const selectCollections = db =>
+  collection =>
+    db.collection(collection)
+
 module.exports = url => {
   const db$ = new Subject()
 
@@ -16,6 +20,10 @@ module.exports = url => {
       })
     })
 
+    // return {
+    //   select: selectCollections(db),
+    //   articles: db$
+    // }
     return db$
   }
 }
